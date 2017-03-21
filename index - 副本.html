@@ -3,19 +3,45 @@
 		<title>My first three.js app</title>
 		<style>
 			body { margin: 0; }
-			
+			#header {
+			background-color:red;
+			color:white;
+			width:300;
+			height:300;
+			text-align:center;
+
+			}
+			#header2 {
+			background-color:red;
+			color:white;
+			width:400;
+			height:400;
+			text-align:center;
+
+			}
 		</style>
 	</head>
 	<body>
 	<h1>就这样吧</h1>
+	<div id="header" >
+	
+	</div>
+	<div id="header2">
+	
+	</div>
 		<script src="build/three.js"></script>
 		<script>
 			var scene = new THREE.Scene();
-			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
-
+			var camera = new THREE.OrthographicCamera( window.innerWidth / - 50, window.innerWidth / 50, window.innerHeight / 50, window.innerHeight / -50 , - 5, 10);
+			var camera2 = new THREE.PerspectiveCamera( 75,window.innerWidth/window.innerHeight, 0.1, 1000 );
+<!--			PerspectiveCamera( 75,window.innerWidth/window.innerHeight, 0.1, 1000 );OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, - 500, 1000 );-->
 			var renderer = new THREE.WebGLRenderer();
-			renderer.setSize( window.innerWidth/2, window.innerHeight/2 );
-			document.body.appendChild( renderer.domElement );
+			var renderer2 = new THREE.WebGLRenderer();
+			renderer2.setSize(400,400);
+			renderer.setSize( 300, 300 );
+			document.getElementById("header").appendChild( renderer.domElement );
+		document.getElementById("header2").appendChild( renderer2.domElement );
+			<!--document.body.appendChild( renderer.domElement );-->
 
 			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
 			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
@@ -23,14 +49,16 @@
 			scene.add( cube );
 
 			camera.position.z = 5;
-
+			camera2.position.z = 5;
 			var render = function () {
 				requestAnimationFrame( render );
+		
 
 				cube.rotation.x += 0.1;
 				cube.rotation.y += 0.1;
 
 				renderer.render(scene, camera);
+				renderer2.render(scene, camera2);
 			};
 
 			render();
