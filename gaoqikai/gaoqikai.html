@@ -26,21 +26,26 @@
 		var raycaster        = new THREE.Raycaster();
 		var isShrinking      = new Boolean(false);
 		var isGameing        = new Boolean(false);
+		var mat_green        = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+		var mat_yellow       = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+		var mat_black        = new THREE.MeshBasicMaterial( { color: 0x000000 } );
 
 		//indexScene about
 		var indexScene       = new THREE.Scene();
 		var indexCamera      = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
 		var cubeGeometry     = new THREE.BoxGeometry( 1, 1, 1 );
-		var mat_green        = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 		var cubeStart        = new THREE.Mesh( cubeGeometry, mat_green );
 		
 
 		//gameScene
 		var gameScene        = new THREE.Scene();
 		var gameCamera       = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000 );
+		var sphereGeometry   = new THREE.SphereGeometry( 50, 32, 32 );
+		var spherePlayer     = new THREE.Mesh( sphereGeometry, mat_yellow );
+		var quitCubeGeometry = new THREE.BoxGeometry( 35, 35, 35 );
+		var cubeQuit         = new THREE.Mesh( quitCubeGeometry, mat_black );
 
-		
-	
+
 		var IndexStart = function () {
 			indexScene.add( cubeStart );
 			cubeStart.position.setZ(-5);
@@ -91,15 +96,41 @@
 		var GameStart = function(){
 			document.removeEventListener( 'click', onIndexSceneMouseClick);
 			document.addEventListener( 'click', onGameSceneMouseClick, false );
+			document.addEventListener( 'onmousedown', onGameSceneMouseDown, false );
+			gameScene.add( spherePlayer );
+			gameScene.add( cubeQuit );
+			gameCamera.position.setZ(500);
+			cubeQuit.position.setX(window.innerWidth  / 2 - 50);
+			cubeQuit.position.setY(window.innerHeight / 2 - 50);
 		};
 		var GameUpdate = function(){
+			//quit cube rotate
+			cubeQuit.rotation.z += 0.1;
+			//syn-position 
+			gameCamera.position.x = spherePlayer.position.x;
+			gameCamera.position.y = spherePlayer.position.y;
+			
 
 		};
 
 		var  onGameSceneMouseClick = function( event ) {
+			event.preventDefault();
+			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+			raycaster.setFromCamera( mouse, gameCamera );
+			var intersects = raycaster.intersectObjects( gameScene.children );
+			if ( intersects.length > 0 ) {
+				if ( cubeQuit == intersects[ 0 ].object ) {
+					isGameing = false;
+					IndexStart();
+				}
+			}
 			//alert("game")
 		};
-
+		var  onGameSceneMouseDown = function( event ) {
+			//alert("game")
+		};
 
 
 
