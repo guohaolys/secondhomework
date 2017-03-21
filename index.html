@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>2017年网页设计与制作第二次作业</title>
+<head>
+<style>
+#header {
+    background-color:black;
+    color:white;
+    text-align:center;
+
+}
+
+#section {
+    width:100%;
+    float:left;
+ 	 
+}
+#footer {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:center;
+
+}
+</style>
+</head>
+
+<body>
+
+<div id="header">
+<h1>2017年网页设计与制作第二次作业（作业列表）</h1>
+<h2>此次作业主要考察大家对HTML+CSS+JavaScript综合应用，并且引入ThreeJs三维库，让大家自学，鼓励大家在此次作业中使用该开源库</h2>
+</div>
+
+<div id="section">
+<table width="100%">
+<tr>
+<th>姓名</th>
+<th>班级</th>
+<th>学号</th>
+<th>简历链接</th>
+</tr>
+<tr>
+<td align="center">guohao</td>
+<td align="center">xx</td>
+<td align="center">xx</td>
+<td align="center"><a href="#">作业网页链接</a></td>
+</tr>
+<!--为了合并方便，请同学们在自己名字下面，每人添加该表的一行，格式类似上面的一行例子-->
+<!--请注意，大家添加自己内容之后确保不要改变下一个同学和自己的注释所在的行数-->
+<!--1	 1308160218	 祝玉婷	 女	 地理信息科学	 信息与电气工程学院	 地理信息科学(理科试验班)	 	 正常-->
+
+
+
+
+
+
+
+<!--2	 1408080104	 冀际安	 男	 地理信息科学	 信息与电气工程学院	 地理信息科学	 	 正常-->
+
+
+
+
+
+
+
+<!--3	 1408080105	 高祺开	 男	 地理信息科学	 信息与电气工程学院	 地理信息科学	 	 正常-->
+
+
+
+
+
+
+
+<!--4	 1408080112	 邢畅	 女	 地理信息科学	 信息与电气工程学院	 地理信息科学	 	 正常-->
+
+
+
+
+
+
+
+<!--5	 1408080115	 张缘	 女	 地理信息科学	 信息与电气工程学院	 地理信息科学	 	 正常-->
+
+
+
+
+
+
+
+<!--6	 1408080116	 刘树文	 男	 地理信息科学	 信息与电气工程学院	 地理信息科学	 	 正常-->
+
+
+
+
+
+
+
+<!--7	 1408080119	 刘昱甫	 男	 地理信息科学	 信息与电气工程学院	 地理信息科学(理科试验班)	 	 正常-->
+
+
+
+
+
+
+
+<!--8	 1408080123	 袁钰	 女	 地理信息科学	 信息与电气工程学院	 地理信息科学	 	 正常-->
+
+
+
+
+
+
+
+<!--9	 1408080124	 杨菡	 女	 地理信息科学	 信息与电气工程学院	 地理信息科学	 	 正常-->
+
+
+
+
+
+
+
+<!--10	 1408080126	 王晓蓉	 女	 地理信息科学	 信息与电气工程学院	 地理信息科学	 	 正常-->
+
+
+
+
+
+
+
+<!--11	 1408160202	 姜澍辰	 女	 地理信息科学	 信息与电气工程学院	 地理信息科学(理科试验班)	 	 正常-->
+
+
+
+
+
+
+
+
+<!--结束-->
+</table>
+</div>
+
+<div id="footer">
+Copyright reserved
+</div>
+<script src="build/three.js"></script>
+		<script>
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight/3 );
+			document.body.appendChild( renderer.domElement );
+
+			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+			var cube = new THREE.Mesh( geometry, material );
+			scene.add( cube );
+
+			camera.position.z = 5;
+
+			var render = function () {
+				requestAnimationFrame( render );
+
+				cube.rotation.x += 0.1;
+				cube.rotation.y += 0.1;
+
+				renderer.render(scene, camera);
+			};
+
+			render();
+		</script>
+</body>
+</html>
