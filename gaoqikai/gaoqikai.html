@@ -11,39 +11,127 @@
 	<meta name="keywords" content="高祺开的3JS实验" />
 </head>
 <body>
-<h1>就这样吧</h1>
-		<script src="../build/three.js"></script>
-		<script>
-			var scene = new THREE.Scene();
-			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+	<script src="../build/three.js"></script>
+	<script>
 
-			var renderer = new THREE.WebGLRenderer();
-			renderer.setSize( window.innerWidth/3, window.innerHeight/2 );
-			document.body.appendChild( renderer.domElement );
+		//render variable
+		var renderer         = new THREE.WebGLRenderer();
+		renderer.setSize( window.innerWidth, window.innerHeight);
+		renderer.setClearColor( 0xf0f0f0 );
+		renderer.sortObjects = false;
+		document.body.appendChild( renderer.domElement );
 
-			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-			var cube = new THREE.Mesh( geometry, material );
-			scene.add( cube );
+		//utils variable
+		var mouse            = new THREE.Vector2(), INTERSECTED;
+		var raycaster        = new THREE.Raycaster();
+		var isShrinking      = new Boolean(false);
+		var isGameing        = new Boolean(false);
 
-			camera.position.z = 5;
+		//indexScene about
+		var indexScene       = new THREE.Scene();
+		var indexCamera      = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+		var cubeGeometry     = new THREE.BoxGeometry( 1, 1, 1 );
+		var mat_green        = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+		var cubeStart        = new THREE.Mesh( cubeGeometry, mat_green );
+		
 
-			var update = function () {
+		//gameScene
+		var gameScene        = new THREE.Scene();
+		var gameCamera       = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000 );
 
-			};
+		
+	
+		var IndexStart = function () {
+			indexScene.add( cubeStart );
+			cubeStart.position.setZ(-5);
+			cubeStart.scale.x = 1;
+			cubeStart.scale.y = 1;
+			cubeStart.scale.z = 1;
+			raycaster = new THREE.Raycaster();
+			document.removeEventListener( 'click', onGameSceneMouseClick);
+			document.addEventListener( 'click', onIndexSceneMouseClick, false );
+		};
+		
+		var IndexUpdate = function () {
+			cubeStart.rotation.x += 0.1;
+			cubeStart.rotation.y += 0.1;
+			if(isShrinking == true){
+				var scaleSpeed = 0.05;
+				if(cubeStart.scale.x > scaleSpeed){
+					cubeStart.scale.x -= scaleSpeed;
+					cubeStart.scale.y -= scaleSpeed;
+					cubeStart.scale.z -= scaleSpeed;
+				}else{
+					isGameing = true;
+					isShrinking = false;
+					GameStart();
+					
+				}
 
-			var render = function () {
-				requestAnimationFrame( render );
+			}	
+		
+			
+		};
 
-				//cube.rotation.x += 0.1;
-				//cube.rotation.y += 0.1;
+		var onIndexSceneMouseClick = function( event ) {
+			event.preventDefault();
+			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
-				renderer.render(scene, camera);
-			};
+			raycaster.setFromCamera( mouse, indexCamera );
+			var intersects = raycaster.intersectObjects( indexScene.children );
+			if ( intersects.length > 0 ) {
+				if ( cubeStart == intersects[ 0 ].object ) {
+					isShrinking = true;
+				}
+			}
+		};
 
-			render();
-		</script>
-	</body>
+		
+		var GameStart = function(){
+			document.removeEventListener( 'click', onIndexSceneMouseClick);
+			document.addEventListener( 'click', onGameSceneMouseClick, false );
+		};
+		var GameUpdate = function(){
+
+		};
+
+		var  onGameSceneMouseClick = function( event ) {
+			//alert("game")
+		};
+
+
+
+
+
+		//renderFunction
+		var Render = function () {
+			requestAnimationFrame( Render );
+			if(isGameing == false){//*******index scene*******
+				IndexUpdate();
+				renderer.render(indexScene, indexCamera);
+			}else{//*******game scene*******
+				GameUpdate();
+				renderer.render(gameScene, gameCamera);
+			}
+			
+			
+			
+		};
+/*
+	if(isGameing == false){//*******index scene*******
+
+	}else{//*******game scene*******
+
+	}
+
+
+	alert("game")
+*/	
+		IndexStart();
+		Render();
+	</script>
+</body>
 
 </body>
 </html>
