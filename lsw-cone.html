@@ -1,0 +1,101 @@
+<html>
+	<head>
+		<title>siran's first three.js app</title>
+		<style>
+			body { margin: 0; }
+			<!--canvas { width: 100%; height: 100% }-->
+			#header {
+			background-color:black;
+			color:white;
+			text-align:center;
+			padding:5px;
+			float:top;
+			}
+			#cut{
+			background-color:grey;
+			height:2px;
+			float:top;
+			}
+			#nav {
+			float:left;
+			background-color:#bebebe;
+			width:120px;
+			}
+			#section {
+			padding-left:120px;
+			}
+			ul 
+			{
+			list-style-type:none;
+			margin:0;
+			padding:0;
+			}
+			a:link,a:visited
+			{
+			display:block;
+			font-weight:bold;
+			color:#FFFFFF;
+			background-color:#bebebe;
+			width:120px;
+			padding:4px;
+			text-align:center;
+			text-decoration:none;
+			text-transform:uppercase;
+			}
+			a:hover,a:active
+			{
+			background-color:#cc0000;
+			}
+		</style>
+	</head>
+	<body>
+	<div id="header">
+	<h1>Three.js Exercise</h1>
+	</div>
+	<div id="cut">
+	</div>
+	<div id="nav">
+	<ul>
+	<li><a href="lsw-cube.html">cube</a></li>
+	<li><a href="lsw-cone">cone</a></li>
+	</ul>
+	</div>
+	<div id="section1">
+		<script src="build/three.js"></script>
+		<script>
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth/2, window.innerHeight/2 );
+			document.body.appendChild( renderer.domElement );
+			var geometry = new THREE.ConeBufferGeometry( 1, 4,5 );
+			var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+			var cube = new THREE.Mesh( geometry, material );
+			scene.add( cube );
+			camera.position.z = 5;
+			var render = function () {
+				requestAnimationFrame( render );
+				<!--cube.rotation.x += 0.02;
+				<!--cube.rotation.y += 0.02;
+				renderer.render(scene, camera);
+			};
+			var render1 = function () {
+				requestAnimationFrame( render1 );
+				cube.rotation.x += 0.02;
+				renderer.render(scene, camera);
+			};
+			var render2 = function () {
+				requestAnimationFrame( render2 );
+				cube.rotation.y += 0.02;
+				renderer.render(scene, camera);
+			};
+		</script>
+		</div>
+		<div id="section">
+		<button type="button" onclick="render()">显示</button>
+		<button type="button" onclick="render1()">上下旋转</button>
+		<button type="button" onclick="render2()">左右旋转</button>
+		</div>
+	</body>
+</html>
+
