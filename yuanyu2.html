@@ -1,0 +1,164 @@
+
+<html >
+	<head>
+		<title>yuanyu2</title>
+		<!--<meta charset="utf-8">-->
+		<!--<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">-->
+		<style>
+			body { margin: 0; }
+			#header {
+			background-color:red;
+			color:white;
+			width:1100;
+			height:400;
+			text-align:center;
+
+			}
+			#header2 {
+			background-color:blue;
+			color:white;
+			width:1000;
+			height:300;
+			text-align:center;
+
+			}
+		</style>
+	</head>
+	<body>
+	<h1>welcome to the nice world</h1> 
+	<div id="header" >
+	</div>
+	<div id="header2">
+		<script src="D:\threejs\build\three.js"></script>
+		<script src="D:\threejs\examples\js\controls\OrbitControls.js"></script>
+		<script src="D:\threejs\examples\js\geometries\ConvexGeometry.js"></script>
+		<script src="D:\threejs\examples\js\Detector.js"></script>
+		<script src="D:\threejs\examples\js\libs\stats.min.js"></script>
+
+		<script>
+			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+			var group, camera, scene, renderer;
+			init();
+			animate();
+			function init() {
+				scene = new THREE.Scene();
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer2 = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer2.setPixelRatio( window.devicePixelRatio );
+				//renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize( 600,200);
+				renderer2.setSize(400,200);
+				document.getElementById("header").appendChild( renderer.domElement );
+		        document.getElementById("header2").appendChild( renderer2.domElement );
+				// camera
+				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 1000);
+				camera2 = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 1000 );
+				camera.position.set( 15, 20, 30 );
+				camera2.position.set( 15, 20, 30 );
+				scene.add( camera );
+				scene.add( camera2 );
+				// controls
+				controls = new THREE.OrbitControls( camera, renderer.domElement );
+				controls2 = new THREE.OrbitControls( camera2, renderer2.domElement );
+				controls.minDistance = 20;
+				controls.maxDistance = 50;
+				controls.maxPolarAngle = Math.PI / 2;
+				controls2.minDistance = 20;
+				controls2.maxDistance = 50;
+				controls2.maxPolarAngle = Math.PI / 2;
+				scene.add( new THREE.AmbientLight( 0x222222 ) );
+				var light = new THREE.PointLight( 0xffffff, 1 );
+				var light2 = new THREE.PointLight( 0xffffff, 1 );
+				camera.add( light );
+				camera2.add( light );
+				scene.add( new THREE.AxisHelper( 20 ) );
+				//
+				var loader = new THREE.TextureLoader();
+				var loader2 = new THREE.TextureLoader();
+				var texture = loader.load( 'textures/sprites/disc.png' );
+				group = new THREE.Group();
+				group2 = new THREE.Group();
+				scene.add( group );
+				// points
+				var pointsGeometry = new THREE.DodecahedronGeometry( 10 );
+				var pointsGeometry2 = new THREE.DodecahedronGeometry( 10 );
+				for ( var i = 0; i < pointsGeometry.vertices.length; i ++ ) {
+					//pointsGeometry.vertices[ i ].add( randomPoint().multiplyScalar( 2 ) ); // wiggle the points
+				}
+				for ( var i = 0; i < pointsGeometry2.vertices.length; i ++ ) {
+					//pointsGeometry.vertices[ i ].add( randomPoint().multiplyScalar( 2 ) ); // wiggle the points
+				}
+				var pointsMaterial = new THREE.PointsMaterial( {
+					color: 0x0080ff,
+					map: texture,
+					size: 1,
+					alphaTest: 0.5
+				} );
+				var pointsMaterial2 = new THREE.PointsMaterial( {
+					color: 0x0080ff,
+					map: texture,
+					size: 1,
+					alphaTest: 0.5
+				} );
+				var points = new THREE.Points( pointsGeometry, pointsMaterial );
+				var points2 = new THREE.Points( pointsGeometry2, pointsMaterial2 );
+				group.add( points );
+				group2.add( points );
+				// convex hull
+				var meshMaterial = new THREE.MeshLambertMaterial( {
+					color: 0xffffff,
+					opacity: 0.5,
+					transparent: true
+				} );
+				var meshMaterial2 = new THREE.MeshLambertMaterial( {
+					color: 0xffffff,
+					opacity: 0.5,
+					transparent: true
+				} );
+				var meshGeometry = new THREE.ConvexGeometry( pointsGeometry.vertices );
+				mesh = new THREE.Mesh( meshGeometry, meshMaterial );
+				mesh.material.side = THREE.BackSide; // back faces
+				mesh.renderOrder = 0;
+				group.add( mesh );
+				mesh = new THREE.Mesh( meshGeometry, meshMaterial.clone() );
+				mesh.material.side = THREE.FrontSide; // front faces
+				mesh.renderOrder = 1;
+				group.add( mesh );
+				var meshGeometry2 = new THREE.ConvexGeometry( pointsGeometry2.vertices );
+				mesh2 = new THREE.Mesh( meshGeometry2, meshMaterial2 );
+				mesh2.material.side = THREE.BackSide; // back faces
+				mesh2.renderOrder = 0;
+				group2.add( mesh );
+				mesh2 = new THREE.Mesh( meshGeometry, meshMaterial.clone() );
+				mesh2.material.side = THREE.FrontSide; // front faces
+				mesh2.renderOrder = 1;
+				group2.add( mesh );
+				//
+				window.addEventListener( 'resize', onWindowResize, false );
+			}
+			function randomPoint() {
+				return new THREE.Vector3( THREE.Math.randFloat( - 1, 1 ), THREE.Math.randFloat( - 1, 1 ), THREE.Math.randFloat( - 1, 1 ) );
+			}
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				camera2.aspect = window.innerWidth / window.innerHeight;
+				camera2.updateProjectionMatrix();
+				renderer2.setSize( window.innerWidth, window.innerHeight );
+			}
+			function animate() {
+				requestAnimationFrame( animate );
+				group.rotation.y += 0.005;
+				group2.rotation.y += 0.005;
+				render();
+			}
+			function render() {
+				renderer.render( scene, camera );
+				renderer2.render(scene, camera2);
+			}
+		</script>
+
+	</body>
+</html>
